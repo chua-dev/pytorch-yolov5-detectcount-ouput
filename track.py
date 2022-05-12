@@ -30,6 +30,7 @@ from yolov5.utils.plots import Annotator, colors
 from deep_sort.utils.parser import get_config
 from deep_sort.deep_sort import DeepSort
 
+COUNTING_LINE_HEIGHT_REVERSE = 150
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # yolov5 deepsort root directory
 if str(ROOT) not in sys.path:
@@ -197,8 +198,8 @@ def detect(opt):
             if show_vid:
                 global count
                 color=(0,255,0)
-                start_point = (0, h-350)
-                end_point = (w, h-350)
+                start_point = (0, h-COUNTING_LINE_HEIGHT_REVERSE)
+                end_point = (w, h-COUNTING_LINE_HEIGHT_REVERSE)
                 cv2.line(im0, start_point, end_point, color, thickness=2)
                 thickness = 3
                 org = (150, 150)
@@ -238,7 +239,7 @@ def detect(opt):
 def count_obj(box,w,h,id):
     global count,data
     center_coordinates = (int(box[0]+(box[2]-box[0])/2) , int(box[1]+(box[3]-box[1])/2))
-    if int(box[1]+(box[3]-box[1])/2) > (h -350):
+    if int(box[1]+(box[3]-box[1])/2) > (h -COUNTING_LINE_HEIGHT_REVERSE):
         if  id not in data:
             count += 1
             data.append(id)
@@ -248,7 +249,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--yolo_model', nargs='+', type=str, default='yolov5n.pt', help='model.pt path(s)')
     parser.add_argument('--deep_sort_model', type=str, default='osnet_x0_25')
-    parser.add_argument('--source', type=str, default='videos/Traffic.mp4', help='source')  # file/folder, 0 for webcam
+    parser.add_argument('--source', type=str, default='videos/video.mp4', help='source')  # file/folder, 0 for webcam
     parser.add_argument('--output', type=str, default='inference/output', help='output folder')  # output folder
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[480], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.5, help='object confidence threshold')
